@@ -196,7 +196,39 @@ namespace TheCads.SkillStreet.AdminTool {
 	public partial class job_project_application {
 		
 		public virtual System.Int64? applied_date { get; set; }
+		public virtual System.Int64 created_date { get; set; }
+		[JsonIgnore]
+		[ForeignKey("created_user_id")]
+		public virtual user_details created_user { get; set; }
+		public virtual System.Int64? created_user_id { get; set; }
+		[Key]
+		public virtual System.Int64 id { get; set; }
+		public virtual System.Boolean? is_book_marked { get; set; }
+		public virtual System.Int32? job_application_status { get; set; }
+		[JsonIgnore]
+		[ForeignKey("job_project_posted_id")]
+		public virtual job_project_posted job_project_posted { get; set; }
+		public virtual System.Int64? job_project_posted_id { get; set; }
+		[JsonIgnore]
+		[ForeignKey("job_seeker_id")]
+		public virtual job_seeker_profile job_seeker { get; set; }
+		public virtual System.Int64? job_seeker_id { get; set; }
+		public virtual System.Boolean status { get; set; }
+		public virtual System.Int64 updated_date { get; set; }
+		[JsonIgnore]
+		[ForeignKey("updated_user_id")]
+		public virtual user_details updated_user { get; set; }
+		public virtual System.Int64? updated_user_id { get; set; }
+	}
+	
+	[System.ComponentModel.DataAnnotations.Schema.TableAttribute("job_project_posted")]
+	public partial class job_project_posted {
+		
 		public virtual System.String contact_name { get; set; }
+		[JsonIgnore]
+		[ForeignKey("country_id")]
+		public virtual country country { get; set; }
+		public virtual System.Int64? country_id { get; set; }
 		public virtual System.Int64 created_date { get; set; }
 		[JsonIgnore]
 		[ForeignKey("created_user_id")]
@@ -208,46 +240,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		public virtual System.String email { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
-		public virtual System.Boolean? is_book_marked { get; set; }
 		public virtual System.Boolean? is_salary_negotiable { get; set; }
-		public virtual System.Int32? job_application_status { get; set; }
-		[JsonIgnore]
-		[ForeignKey("job_project_posted_id")]
-		public virtual job_project_posted job_project_posted { get; set; }
-		public virtual System.Int64? job_project_posted_id { get; set; }
-		[JsonIgnore]
-		[ForeignKey("job_seeker_id")]
-		public virtual job_seeker_profile job_seeker { get; set; }
-		public virtual System.Int64? job_seeker_id { get; set; }
 		public virtual System.Int32? job_status { get; set; }
 		public virtual System.String location { get; set; }
-		public virtual System.Int64? published_date { get; set; }
-		public virtual System.Double? salary_begin { get; set; }
-		public virtual System.Double? salary_end { get; set; }
-		public virtual System.Int32? seniority_level { get; set; }
-		public virtual System.Boolean status { get; set; }
-		public virtual System.Int32? terms { get; set; }
-		public virtual System.Int64 updated_date { get; set; }
-		[JsonIgnore]
-		[ForeignKey("updated_user_id")]
-		public virtual user_details updated_user { get; set; }
-		public virtual System.Int64? updated_user_id { get; set; }
-	}
-	
-	[System.ComponentModel.DataAnnotations.Schema.TableAttribute("job_project_posted")]
-	public partial class job_project_posted {
-		
-		[JsonIgnore]
-		[ForeignKey("country_id")]
-		public virtual country country { get; set; }
-		public virtual System.Int64? country_id { get; set; }
-		public virtual System.Int64 created_date { get; set; }
-		[JsonIgnore]
-		[ForeignKey("created_user_id")]
-		public virtual user_details created_user { get; set; }
-		public virtual System.Int64? created_user_id { get; set; }
-		[Key]
-		public virtual System.Int64 id { get; set; }
 		[JsonIgnore]
 		[ForeignKey("organization_details_id")]
 		public virtual organization_detail organization_detail { get; set; }
@@ -256,13 +251,18 @@ namespace TheCads.SkillStreet.AdminTool {
 		[ForeignKey("published_by_id")]
 		public virtual user_details published_by { get; set; }
 		public virtual System.Int64? published_by_id { get; set; }
+		public virtual System.Int64? published_date { get; set; }
 		[JsonIgnore]
 		[InverseProperty("job_project_posted")]
 		public virtual System.Collections.Generic.ICollection<job_required_skill> required_skills { get; set; }
 		[JsonIgnore]
 		[InverseProperty("job_project_posted")]
 		public virtual System.Collections.Generic.ICollection<job_required_smart_skill> required_smart_skills { get; set; }
+		public virtual System.Double? salary_begin { get; set; }
+		public virtual System.Double? salary_end { get; set; }
+		public virtual System.Int32? seniority_level { get; set; }
 		public virtual System.Boolean status { get; set; }
+		public virtual System.Int32? terms { get; set; }
 		public virtual System.Int64 updated_date { get; set; }
 		[JsonIgnore]
 		[ForeignKey("updated_user_id")]
@@ -431,9 +431,6 @@ namespace TheCads.SkillStreet.AdminTool {
 		[InverseProperty("job_seeker")]
 		public virtual System.Collections.Generic.ICollection<job_seeker_other_skill> other_skills { get; set; }
 		public virtual System.String profile_photo { get; set; }
-		[JsonIgnore]
-		[InverseProperty("job_seeker")]
-		public virtual System.Collections.Generic.ICollection<other_skill> profile_visits { get; set; }
 		[JsonIgnore]
 		[InverseProperty("job_seeker")]
 		public virtual System.Collections.Generic.ICollection<job_seeker_skill> skills { get; set; }
@@ -674,10 +671,6 @@ namespace TheCads.SkillStreet.AdminTool {
 		public virtual System.Int64? created_user_id { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
-		[JsonIgnore]
-		[ForeignKey("job_seeker_id")]
-		public virtual job_seeker_profile job_seeker { get; set; }
-		public virtual System.Int64 job_seeker_id { get; set; }
 		public virtual System.String name { get; set; }
 		[JsonIgnore]
 		[ForeignKey("organization_details_id")]
