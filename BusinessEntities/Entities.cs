@@ -16,7 +16,7 @@ namespace TheCads.SkillStreet.AdminTool {
 	using Newtonsoft.Json;
 	
 	
-	public partial class BusinessDbContext : Microsoft.EntityFrameworkCore.DbContext {
+	public partial class SkillStreetDbContext : Microsoft.EntityFrameworkCore.DbContext {
 		
 		public virtual DbSet<country> country { get; set; }
 		public virtual DbSet<education> education { get; set; }
@@ -46,7 +46,7 @@ namespace TheCads.SkillStreet.AdminTool {
 		public virtual DbSet<work_benefit> work_benefits { get; set; }
 		public virtual DbSet<work_experience> work_experience { get; set; }
 		
-		public BusinessDbContext(DbContextOptions options) : 
+		public SkillStreetDbContext(DbContextOptions<SkillStreetDbContext> options) : 
 				base(options) {
 		}
 	}
@@ -61,6 +61,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		public virtual System.Int64? created_user_id { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("country")]
+		public virtual System.Collections.Generic.ICollection<job_project_posted> job_project_posteds { get; set; }
 		[JsonIgnore]
 		[InverseProperty("country")]
 		public virtual System.Collections.Generic.ICollection<job_seeker_profile> job_seekers { get; set; }
@@ -83,6 +86,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[ForeignKey("updated_user_id")]
 		public virtual user_details updated_user { get; set; }
 		public virtual System.Int64? updated_user_id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("country_ref")]
+		public virtual System.Collections.Generic.ICollection<work_experience> work_experiences { get; set; }
 	}
 	
 	[System.ComponentModel.DataAnnotations.Schema.TableAttribute("education")]
@@ -241,6 +247,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[Key]
 		public virtual System.Int64 id { get; set; }
 		public virtual System.Boolean? is_salary_negotiable { get; set; }
+		[JsonIgnore]
+		[InverseProperty("job_project_posted")]
+		public virtual System.Collections.Generic.ICollection<job_project_application> job_project_applications { get; set; }
 		public virtual System.Int32? job_status { get; set; }
 		public virtual System.String location { get; set; }
 		[JsonIgnore]
@@ -359,6 +368,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[ForeignKey("created_user_id")]
 		public virtual user_details created_user { get; set; }
 		public virtual System.Int64? created_user_id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("job_seeker_experience")]
+		public virtual System.Collections.Generic.ICollection<education> educations { get; set; }
 		public virtual System.Int64? end_date { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
@@ -375,6 +387,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[ForeignKey("updated_user_id")]
 		public virtual user_details updated_user { get; set; }
 		public virtual System.Int64? updated_user_id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("job_seeker_experience")]
+		public virtual System.Collections.Generic.ICollection<work_experience> work_experiences { get; set; }
 	}
 	
 	[System.ComponentModel.DataAnnotations.Schema.TableAttribute("job_seeker_other_skill")]
@@ -426,6 +441,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[JsonIgnore]
 		[InverseProperty("job_seeker")]
 		public virtual System.Collections.Generic.ICollection<job_project_application> job_project_applications { get; set; }
+		[JsonIgnore]
+		[InverseProperty("job_seeker")]
+		public virtual System.Collections.Generic.ICollection<job_project_visit_count> job_project_visit_counts { get; set; }
 		public virtual System.String location { get; set; }
 		[JsonIgnore]
 		[InverseProperty("job_seeker")]
@@ -511,14 +529,23 @@ namespace TheCads.SkillStreet.AdminTool {
 		[ForeignKey("created_user_id")]
 		public virtual user_details created_user { get; set; }
 		public virtual System.Int64? created_user_id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("org")]
+		public virtual System.Collections.Generic.ICollection<education> educations { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
 		[JsonIgnore]
 		[ForeignKey("industry_id")]
 		public virtual industry industry { get; set; }
 		public virtual System.Int64? industry_id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("organization")]
+		public virtual System.Collections.Generic.ICollection<invited_user> invited_users { get; set; }
 		public virtual System.Boolean? is_verified { get; set; }
 		public virtual System.String name { get; set; }
+		[JsonIgnore]
+		[InverseProperty("organization")]
+		public virtual System.Collections.Generic.ICollection<organization_detail> organization_details { get; set; }
 		[JsonIgnore]
 		[ForeignKey("organization_type_id")]
 		public virtual organization_type organization_type { get; set; }
@@ -532,6 +559,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[JsonIgnore]
 		[InverseProperty("organization")]
 		public virtual System.Collections.Generic.ICollection<organzation_user> users { get; set; }
+		[JsonIgnore]
+		[InverseProperty("org")]
+		public virtual System.Collections.Generic.ICollection<work_experience> work_experiences { get; set; }
 	}
 	
 	[System.ComponentModel.DataAnnotations.Schema.TableAttribute("organization_details")]
@@ -561,10 +591,10 @@ namespace TheCads.SkillStreet.AdminTool {
 		[ForeignKey("organization_id")]
 		public virtual organization organization { get; set; }
 		public virtual System.Int64? organization_id { get; set; }
-		public virtual System.String profile_photo { get; set; }
 		[JsonIgnore]
 		[InverseProperty("organization_detail")]
-		public virtual System.Collections.Generic.ICollection<other_skill> profile_visits { get; set; }
+		public virtual System.Collections.Generic.ICollection<organization_office> organization_offices { get; set; }
+		public virtual System.String profile_photo { get; set; }
 		public virtual System.Boolean status { get; set; }
 		public virtual System.String story { get; set; }
 		public virtual System.Int64 updated_date { get; set; }
@@ -644,6 +674,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		public virtual System.Int64? created_user_id { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("organization_user")]
+		public virtual System.Collections.Generic.ICollection<invited_user> invited_users { get; set; }
 		public virtual System.String location { get; set; }
 		[JsonIgnore]
 		[ForeignKey("organization_id")]
@@ -671,11 +704,10 @@ namespace TheCads.SkillStreet.AdminTool {
 		public virtual System.Int64? created_user_id { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
-		public virtual System.String name { get; set; }
 		[JsonIgnore]
-		[ForeignKey("organization_details_id")]
-		public virtual organization_detail organization_detail { get; set; }
-		public virtual System.Int64 organization_details_id { get; set; }
+		[InverseProperty("other_skill")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_other_skill> job_seeker_other_skill { get; set; }
+		public virtual System.String name { get; set; }
 		public virtual System.Boolean status { get; set; }
 		public virtual System.Int64 updated_date { get; set; }
 		[JsonIgnore]
@@ -697,6 +729,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[JsonIgnore]
 		[InverseProperty("skill")]
 		public virtual System.Collections.Generic.ICollection<job_required_skill> job_required_skills { get; set; }
+		[JsonIgnore]
+		[InverseProperty("skill")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_skill> job_seeker_skills { get; set; }
 		public virtual System.String name { get; set; }
 		public virtual System.Boolean status { get; set; }
 		public virtual System.Int64 updated_date { get; set; }
@@ -719,6 +754,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[JsonIgnore]
 		[InverseProperty("smart_skill")]
 		public virtual System.Collections.Generic.ICollection<job_required_smart_skill> job_required_smart_skills { get; set; }
+		[JsonIgnore]
+		[InverseProperty("smart_skill")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_smart_skill> job_seeker_smart_skills { get; set; }
 		public virtual System.String name { get; set; }
 		public virtual System.Boolean status { get; set; }
 		public virtual System.Int64 updated_date { get; set; }
@@ -755,18 +793,168 @@ namespace TheCads.SkillStreet.AdminTool {
 	public partial class user_details {
 		
 		public virtual System.Boolean? activate { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<country> countries_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<country> countries_updated { get; set; }
 		public virtual System.Int64 created_date { get; set; }
 		[JsonIgnore]
 		[ForeignKey("created_user_id")]
 		public virtual user_details created_user { get; set; }
 		public virtual System.Int64? created_user_id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<education> educations_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<education> educations_updated { get; set; }
 		public virtual System.String fname { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<image_gallery> images_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<image_gallery> images_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<industry> industries_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<industry> industries_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<invited_user> invited_users_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<invited_user> invited_users_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("published_by")]
+		public virtual System.Collections.Generic.ICollection<job_project_posted> job_posteds_publishd_by { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_project_application> job_project_applications_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_project_application> job_project_applications_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_project_posted> job_project_posteds_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_project_posted> job_project_posteds_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_project_visit_count> job_project_visit_counts_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_project_visit_count> job_project_visit_counts_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_required_skill> job_required_skills_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_required_skill> job_required_skills_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_required_smart_skill> job_required_smart_skill_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_required_smart_skill> job_required_smart_skill_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_experience> job_seeker_experiences_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_experience> job_seeker_experiences_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_other_skill> job_seeker_other_skills_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_other_skill> job_seeker_other_skills_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_profile> job_seeker_profiles_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_profile> job_seeker_profiles_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("user_detail")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_profile> job_seekers { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_skill>  job_seeker_skills_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_skill> job_seeker_skills_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_smart_skill> job_seeker_smart_skills_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<job_seeker_smart_skill> job_seeker_smart_skills_updated { get; set; }
 		public virtual System.String lname { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<organization_detail> organization_details_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<organization_detail> organization_details_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<organization_office> organization_offices_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<organization_office> organization_offices_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<organization> organizations_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<organization> organizations_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<organization_type> organization_types_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<organization_type> organization_types_updated { get; set; }
 		[JsonIgnore]
 		[InverseProperty("user_detail")]
 		public virtual System.Collections.Generic.ICollection<organzation_user> organzation_users { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<organzation_user> organzation_users_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<organzation_user> organzation_users_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<other_skill> other_skills_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<other_skill> other_skills_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<skill> skills_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<skill> skills_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<smart_skill> smart_skills_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<smart_skill> smart_skills_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<state> states_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<state> states_updated { get; set; }
 		public virtual System.Boolean status { get; set; }
 		public virtual System.Int64 updated_date { get; set; }
 		[JsonIgnore]
@@ -774,6 +962,18 @@ namespace TheCads.SkillStreet.AdminTool {
 		public virtual user_details updated_user { get; set; }
 		public virtual System.Int64? updated_user_id { get; set; }
 		public virtual System.String user_id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<work_benefit> work_benefits_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<work_benefit> work_benefits_updated { get; set; }
+		[JsonIgnore]
+		[InverseProperty("created_user")]
+		public virtual System.Collections.Generic.ICollection<work_experience> work_experiences_created { get; set; }
+		[JsonIgnore]
+		[InverseProperty("updated_user")]
+		public virtual System.Collections.Generic.ICollection<work_experience> work_experiences_updated { get; set; }
 	}
 	
 	[System.ComponentModel.DataAnnotations.Schema.TableAttribute("work_benefits")]
@@ -837,6 +1037,6 @@ namespace TheCads.SkillStreet.AdminTool {
 	[System.Composition.ExportAttribute(typeof(IBusinessRepositoryFactory))]
 	public partial class DbContextFactory : IBusinessRepositoryFactory {
 		
-		public virtual IDisposable GetDbContext(DbContextOptions options){ return new BusinessDbContext(options); }
+		public virtual IDisposable GetDbContext(DbContextOptions options){ return new SkillStreetDbContext(options as DbContextOptions<SkillStreetDbContext>); }
 	}
 }
