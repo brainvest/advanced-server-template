@@ -32,8 +32,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Brainvest.Dscribe.Implementations.EfCore.All" Version="0.4.2" />
-    <PackageReference Include="Brainvest.Dscribe.Runtime" Version="0.4.2" />
+    <PackageReference Include="Brainvest.Dscribe.Implementations.EfCore.All" Version="0.5.0" />
+    <PackageReference Include="Brainvest.Dscribe.Runtime" Version="0.5.0" />
   </ItemGroup>
+
+  <!-- <ItemGroup>
+    <ProjectReference Include="../../../dscribe/code/server/Core/Runtime/Runtime.csproj" />
+    <ProjectReference Include="../../../dscribe/code/server/Implementations/EfCore/EfCore.All/EfCore.All.csproj" />  
+    <ProjectReference Include="../../../dscribe/code/server/Core/MetadataDbAccess/MetadataDbAccess.csproj" />  
+    <ProjectReference Include="../../../dscribe/code/server/Infrastructure/LobTools/LobTools.csproj" />  
+  </ItemGroup> -->
 
 </Project>

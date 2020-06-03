@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  AuthAuthority: https://keycloak.yourdomain.com/auth/realms/yourrealm/
+  ASPNETCORE_ENVIRONMENT: Development
+  GlobalConfiguration__InstanceSettings__InstanceName__LoadBusinessFromAssemblyName: Dscribe.AdvancedServerTemplate.AppTypeName
+kind: ConfigMap
+metadata:
+  name: dscribe
