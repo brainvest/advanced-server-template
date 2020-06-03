@@ -59,6 +59,9 @@ namespace TheCads.SkillStreet.AdminTool {
 		[ForeignKey("created_user_id")]
 		public virtual user_details created_user { get; set; }
 		public virtual System.Int64? created_user_id { get; set; }
+		[JsonIgnore]
+		[InverseProperty("country_ref")]
+		public virtual System.Collections.Generic.ICollection<education> educations { get; set; }
 		[Key]
 		public virtual System.Int64 id { get; set; }
 		[JsonIgnore]
